@@ -1,68 +1,51 @@
+// ============================================
+// CARA MEMASUKKAN GAMBAR PRODUK:
+// ============================================
+// Edit array products dibawah, isi property "image" dengan path foto
+// Contoh: image: "image/Paket ratu 1.jpg"
+// ============================================
+
 // Data Produk
 const products = [
   {
     id: 1,
-    name: "Ayam Kampung Segar",
-    price: 85000,
-    unit: "kg",
-    icon: "🐓",
-    desc: "Ayam kampung pilihan, segar setiap hari",
+    name: "Paket Ratu 1",
+    price: 35000,
+    icon: "🍗",
+    image: "image/Paket ratu 1.jpg",  // ← MASUKKAN PATH FOTO DISINI
+    desc: "Nasi+Paha+Air mineral+Kremes",
   },
   {
     id: 2,
-    name: "Ayam Broiler Premium",
-    price: 45000,
-    unit: "kg",
+    name: "Paket Ratu 4",
+    price: 32000,
     icon: "🍗",
-    desc: "Ayam broiler kualitas premium",
+    image: "image/Paket ratu 4.jpg",  // ← MASUKKAN PATH FOTO DISINI
+    desc: "Nasi+Dada Bakar+Air mineral+Kremes",
   },
   {
     id: 3,
-    name: "Ayam Fillet Dada",
-    price: 65000,
-    unit: "kg",
-    icon: "🥩",
-    desc: "Daging dada ayam tanpa tulang",
+    name: "Ayam Goreng Kremes",
+    price: 26000,
+    icon: "🍗",
+    image: "image/Ayam goreng kremes.jpg",  // ← MASUKKAN PATH FOTO DISINI
+    desc: "Ayam goreng+kremes",
   },
   {
     id: 4,
-    name: "Ayam Potong Utuh",
-    price: 40000,
-    unit: "ekor",
-    icon: "🐔",
-    desc: "Ayam utuh sudah dipotong bersih",
+    name: "Ayam Bakar Kremes",
+    price: 25000,
+    icon: "🍗",
+    image: "image/Ayam bakar kremes.jpg",  // ← MASUKKAN PATH FOTO DISINI
+    desc: "Ayam Bakar+Kremes",
   },
   {
     id: 5,
-    name: "Ayam Organik",
-    price: 95000,
-    unit: "kg",
-    icon: "🌿",
-    desc: "Ayam organik bebas antibiotik",
-  },
-  {
-    id: 6,
-    name: "Paha Ayam",
-    price: 55000,
-    unit: "kg",
-    icon: "🍖",
-    desc: "Paha ayam pilihan berkualitas",
-  },
-  {
-    id: 7,
-    name: "Sayap Ayam",
-    price: 50000,
-    unit: "kg",
-    icon: "🍗",
-    desc: "Sayap ayam segar untuk berbagai menu",
-  },
-  {
-    id: 8,
-    name: "Ceker Ayam",
-    price: 35000,
-    unit: "kg",
-    icon: "🦶",
-    desc: "Ceker ayam bersih siap masak",
+    name: "Terong Balado",
+    price: 15500,
+    icon: "🍆",
+    image: "image/Terong balado.jpg",  // ← MASUKKAN PATH FOTO DISINI
+    desc: "Terong balado",
   },
 ];
 
@@ -86,22 +69,21 @@ function renderProducts() {
       (product) => `
         <div class="product-card">
             <div class="product-image">
-                <span class="product-icon">${product.icon}</span>
+                ${
+                  product.image && product.image.trim() !== ""
+                    ? `<img src="${product.image}" alt="${product.name}" class="product-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" /><span class="product-icon" style="display:none;">${product.icon}</span>`
+                    : `<span class="product-icon">${product.icon}</span>`
+                }
             </div>
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
                 <p class="product-desc">${product.desc}</p>
                 <div class="product-price-section">
                     <div>
-                        <span class="product-price">${formatRupiah(
-                          product.price
-                        )}</span>
-                        <span class="product-unit">/${product.unit}</span>
+                        <span class="product-price">${formatRupiah(product.price)}</span>
                     </div>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(${
-                  product.id
-                })">
+                <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -143,7 +125,7 @@ function updateCartCount() {
   }
 }
 
-// Render Cart
+// Render Cart - TANPA BUG UNDEFINED
 function renderCart() {
   const cartItems = document.getElementById("cartItems");
   const cartFooter = document.getElementById("cartFooter");
@@ -162,34 +144,30 @@ function renderCart() {
         (item) => `
             <div class="cart-item">
                 <div class="cart-item-info">
-                    <span class="cart-item-icon">${item.icon}</span>
+                    ${
+                      item.image && item.image.trim() !== ""
+                        ? `<img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" /><span class="cart-item-icon" style="display:none;">${item.icon}</span>`
+                        : `<span class="cart-item-icon">${item.icon}</span>`
+                    }
                     <div>
                         <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">${formatRupiah(
-                          item.price
-                        )}/${item.unit}</div>
+                        <div class="cart-item-price">${formatRupiah(item.price)}</div>
                     </div>
                 </div>
                 <div class="cart-item-controls">
-                    <button class="qty-btn" onclick="updateQuantity(${
-                      item.id
-                    }, -1)">
+                    <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
                     </button>
                     <span class="cart-item-qty">${item.quantity}</span>
-                    <button class="qty-btn" onclick="updateQuantity(${
-                      item.id
-                    }, 1)">
+                    <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
                     </button>
-                    <button class="remove-btn" onclick="removeFromCart(${
-                      item.id
-                    })">
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -201,10 +179,7 @@ function renderCart() {
       )
       .join("");
 
-    const total = cart.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     document.getElementById("totalPrice").textContent = formatRupiah(total);
     cartFooter.classList.remove("hidden");
   }
@@ -295,9 +270,7 @@ document.getElementById("whatsappBtn").addEventListener("click", async () => {
     phone: phone,
     address: address,
     notes: notes,
-    items: cart
-      .map((item) => `${item.name} (${item.quantity} ${item.unit})`)
-      .join(", "),
+    items: cart.map((item) => `${item.name} (${item.quantity} porsi)`).join(", "),
     total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
   };
 
@@ -319,12 +292,7 @@ document.getElementById("whatsappBtn").addEventListener("click", async () => {
   // Buat pesan WhatsApp
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const itemsList = cart
-    .map(
-      (item) =>
-        `- ${item.name}: ${item.quantity} ${item.unit} (${formatRupiah(
-          item.price * item.quantity
-        )})`
-    )
+    .map((item) => `- ${item.name}: ${item.quantity} porsi (${formatRupiah(item.price * item.quantity)})`)
     .join("%0A");
 
   const message = `*PESANAN BARU*%0A%0A*Nama:* ${name}%0A*Telepon:* ${phone}%0A*Alamat:* ${address}%0A${
@@ -368,6 +336,7 @@ function showNotification(message) {
         box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         z-index: 3000;
         animation: slideIn 0.3s ease-out;
+        font-weight: 600;
     `;
   notification.textContent = message;
   document.body.appendChild(notification);
